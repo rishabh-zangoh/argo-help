@@ -1,0 +1,12 @@
+apiVersion: v2
+name: llama-model
+description: A Helm chart for Kubernetes
+
+# A chart can be either an 'application' or a 'library' chart.
+type: application
+
+# Chart version, increment this on updates
+version: 0.1.0
+
+# Application version
+appVersion: "1.16.0"

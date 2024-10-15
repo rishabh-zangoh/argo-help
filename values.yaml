@@ -1,0 +1,82 @@
+# Default values for llama-model
+replicaCount: 1
+
+image:
+  repository: vllm/vllm-openai
+  pullPolicy: IfNotPresent
+  tag: "v0.6.2"
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8000 # Updated port
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8000 # Updated port
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8000 # Updated port
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Environment variables for the VLLM model
+env:
+  - name: HUGGING_FACE_HUB_TOKEN
+    value: "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"
+  - name: CUDA_VISIBLE_DEVICES
+    value: "1,0"
+  - name: HF_HUB_ENABLE_HF_TRANSFER
+    value: "false"
+
+# Command to run the VLLM model
+command: ["vllm_run"]
+args: ["--model", "meta-llama/Llama-3.2-1B-Instruct", "--device", "cpu"]
